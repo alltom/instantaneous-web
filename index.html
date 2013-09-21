@@ -5,9 +5,15 @@ body {
 }
 img {
 	display: none;
+}
+.hover img {
 	cursor: hand;
 }
+#loading {
+	margin: 1em;
+}
 </style>
+<div id="loading">Loading...</div>
 <img src="1.png" id="pic-0" />
 <img src="2.png" id="pic-1" />
 <img src="3.png" id="pic-2" />
@@ -27,6 +33,7 @@ var maps = [
 	{ top: 113, right: 474, bottom: 198, left: 232 },
 	{ top: 376, right: 562, bottom: 407, left: 444 },
 	{ top: 115, right: 817, bottom: 196, left: 672 },
+	{},
 ];
 
 function goto(i2) {
@@ -35,29 +42,34 @@ function goto(i2) {
 	$("#pic-" + i).show();
 }
 
-$("#pic-" + i).show();
+$(window).on("load", function () {
+	$("#loading").hide();
+	$("#pic-" + i).show();
+});
+
 $(function () {
 	var rect = maps[0], hover = false;
 
 	$(document.body).on("mousemove", function (e) {
 		if (!hover && e.pageX >= rect.left && e.pageX <= rect.right && e.pageY >= rect.top && e.pageY <= rect.bottom) {
 			hover = true;
+			$(document.body).addClass("hover");
 			goto(i + 1);
 		} else if (hover && (e.pageX < rect.left || e.pageX > rect.right || e.pageY < rect.top || e.pageY > rect.bottom)) {
 			hover = false;
+			$(document.body).removeClass("hover");
 			goto(i - 1);
 		}
 	});
 
 	$(document.body).on("click", function (e) {
-		if (hover) {
-			goto(i + 1);
-		} else {
-			goto(i + 2);
+		if (!hover) {
+			return;
 		}
+		goto(i + 1);
 		rect = maps[i / 2];
-		console.log(rect)
 		hover = false;
+		$(document.body).removeClass("hover");
 	});
 
 	// var n = 0, rect = { top: 0, right: 0, bottom: 0, left: 0 };
