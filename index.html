@@ -1,0 +1,80 @@
+<style>
+body {
+	margin: 0;
+	padding: 0;
+}
+img {
+	display: none;
+	cursor: hand;
+}
+</style>
+<img src="1.png" id="pic-0" />
+<img src="2.png" id="pic-1" />
+<img src="3.png" id="pic-2" />
+<img src="4.png" id="pic-3" />
+<img src="5.png" id="pic-4" />
+<img src="6.png" id="pic-5" />
+<img src="7.png" id="pic-6" />
+<img src="8.png" id="pic-7" />
+<img src="9.png" id="pic-8" />
+<script src="jquery.min.js"></script>
+<script>
+var $pics = $("img");
+var i = 0;
+
+var maps = [
+	{ top: 18, right: 440, bottom: 53, left: 338 },
+	{ top: 113, right: 474, bottom: 198, left: 232 },
+	{ top: 376, right: 562, bottom: 407, left: 444 },
+	{ top: 115, right: 817, bottom: 196, left: 672 },
+];
+
+function goto(i2) {
+	$("#pic-" + i).hide();
+	i = i2;
+	$("#pic-" + i).show();
+}
+
+$("#pic-" + i).show();
+$(function () {
+	var rect = maps[0], hover = false;
+
+	$(document.body).on("mousemove", function (e) {
+		if (!hover && e.pageX >= rect.left && e.pageX <= rect.right && e.pageY >= rect.top && e.pageY <= rect.bottom) {
+			hover = true;
+			goto(i + 1);
+		} else if (hover && (e.pageX < rect.left || e.pageX > rect.right || e.pageY < rect.top || e.pageY > rect.bottom)) {
+			hover = false;
+			goto(i - 1);
+		}
+	});
+
+	$(document.body).on("click", function (e) {
+		if (hover) {
+			goto(i + 1);
+		} else {
+			goto(i + 2);
+		}
+		rect = maps[i / 2];
+		console.log(rect)
+		hover = false;
+	});
+
+	// var n = 0, rect = { top: 0, right: 0, bottom: 0, left: 0 };
+	// $(document.body).on("click", function (e) {
+	// 	if (n === 0) {
+	// 		rect.left = e.pageX;
+	// 		rect.top = e.pageY;
+	// 		n++;
+	// 	} else if (n === 1) {
+	// 		rect.right = e.pageX;
+	// 		rect.bottom = e.pageY;
+	// 		console.log(i, rect);
+	// 		n = 0;
+	// 		$("#pic-" + i).hide();
+	// 		i++; i++;
+	// 		$("#pic-" + i).show();
+	// 	}
+	// });
+})
+</script>
